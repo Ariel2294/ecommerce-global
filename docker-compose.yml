@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  dev:
+    container_name: ecommerce-service
+    image: ecommerce-service:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile.dev
+    env_file:
+      - .env
+    command: npm run start:debug
+    ports:
+      - 9000:9000
+    depends_on:
+      - mongodb
+    networks:
+      - network-ecommerce-service-service
+    volumes:
+      - .:/usr/src/app
+    restart: unless-stopped
+  mongodb:
+    container_name: ecommerce-service-db
+    image: mongo:4.2
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: dev-ecommerce-service
+    networks:
+      - network-ecommerce-service-service
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+    restart: unless-stopped
+
+networks:
+  network-ecommerce-service-service:
+volumes:
+  mongodb_data_container:

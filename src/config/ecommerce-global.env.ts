@@ -8,4 +8,8 @@ export class EcommerceGlobalEnv {
   @IsString()
   @IsNotEmpty()
   PORT: string;
+
+  @IsString()
+  @IsNotEmpty()
+  DATABASE_URI: string;
 }

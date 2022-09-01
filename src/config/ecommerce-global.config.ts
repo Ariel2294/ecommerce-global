@@ -12,4 +12,8 @@ export class EcommerceGlobalConfig {
       nodeEnv: this.config.get<string>('NODE_ENV'),
     };
   }
+
+  get databaseURL(): string {
+    return this.config.get('DATABASE_URI');
+  }
 }

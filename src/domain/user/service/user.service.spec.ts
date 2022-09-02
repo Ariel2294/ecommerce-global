@@ -5,27 +5,40 @@ import { UserRepository } from '../repository/user.repository';
 import { UserService } from './user.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Users } from '../schema/users.schema';
-import { UserModel } from '../test/user.model.mock';
-import { dataUserMock } from '../../../__mocks__/users.mock';
+import { dataUserMock, userDtoMock } from '../../../__mocks__/users.mock';
+import { UserVerificationsRepository } from '../repository/user-verification.repository';
+import { UsersVerifications } from '../schema/users-verification.schema';
+import { MockModel } from '../../../__mocks__/database.mock';
+import { InternalServerErrorException } from '@nestjs/common';
 
 describe('UserService', () => {
   let service: UserService;
   let userRepository: UserRepository;
-  //let userModel: UserModel;
+  let userVerificationsRepository: UserVerificationsRepository;
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [WinstonModule.forRoot({ silent: true })],
       providers: [
         UserService,
         UserRepository,
+        UserVerificationsRepository,
         MongoErrorHandler,
         {
           provide: getModelToken(Users.name),
-          useClass: UserModel,
+          useValue: MockModel,
+        },
+        {
+          provide: getModelToken(UsersVerifications.name),
+          useValue: MockModel,
         },
       ],
     }).compile();
 
+    userRepository = module.get<UserRepository>(UserRepository);
+    userVerificationsRepository = module.get<UserVerificationsRepository>(
+      UserVerificationsRepository,
+    );
     service = module.get<UserService>(UserService);
   });
 
@@ -34,40 +47,40 @@ describe('UserService', () => {
   });
 
   describe('create operations', () => {
-    beforeEach(async () => {
-      const moduleRef = await Test.createTestingModule({
-        providers: [
-          UserRepository,
-          {
-            provide: getModelToken(Users.name),
-            useValue: UserModel,
-          },
-        ],
-      }).compile();
-
-      userRepository = moduleRef.get<UserRepository>(UserRepository);
-    });
-
     describe('create', () => {
-      describe('when create is called', () => {
-        let user: Users;
-        let saveSpy: jest.SpyInstance;
-        let constructorSpy: jest.SpyInstance;
+      it('should create new user', async () => {
+        userRepository.create = jest.fn().mockReturnValueOnce(dataUserMock);
+        userVerificationsRepository.create = jest
+          .fn()
+          .mockResolvedValueOnce({ user: '63122c5a82bf6850c2bd00cf' });
 
-        beforeEach(async () => {
-          saveSpy = jest.spyOn(UserModel.prototype, 'save');
-          constructorSpy = jest.spyOn(UserModel.prototype, 'constructorSpy');
-          user = await userRepository.create(dataUserMock());
-        });
+        const result = await service.create(userDtoMock);
 
-        test('then it should call the userModel', () => {
-          expect(saveSpy).toHaveBeenCalled();
-          expect(constructorSpy).toHaveBeenCalledWith(dataUserMock());
+        expect(result).toMatchObject({
+          _id: '63122c5a82bf6850c2bd00cf',
         });
+      });
 
-        test('then it should return a user', () => {
-          expect(user).toEqual(dataUserMock());
-        });
+      it('should  fail to create new user', async () => {
+        userRepository.create = jest
+          .fn()
+
+          .mockImplementationOnce(() => {
+            throw new InternalServerErrorException();
+          });
+        userVerificationsRepository.create = jest
+          .fn()
+          .mockImplementationOnce(() => {
+            throw new InternalServerErrorException();
+          });
+
+        try {
+          await service.create(userDtoMock);
+        } catch (error) {
+          expect(error).toBeInstanceOf(InternalServerErrorException);
+          expect(error.status).toBe(500);
+          expect(error.message).toBe('Internal Server Error');
+        }
       });
     });
   });

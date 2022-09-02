@@ -1,4 +1,10 @@
-import { Document, FilterQuery, Model, UpdateQuery } from 'mongoose';
+import {
+  Document,
+  FilterQuery,
+  Model,
+  QueryOptions,
+  UpdateQuery,
+} from 'mongoose';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
@@ -18,7 +24,7 @@ export abstract class EntityRepository<T extends Document> {
 
   async find(
     entityFilterQuery: FilterQuery<T>,
-    optionalFilter?: FilterQuery<T>,
+    optionalFilter?: QueryOptions<T>,
   ): Promise<T[] | null> {
     return this.entityModel.find(entityFilterQuery, undefined, optionalFilter);
   }
@@ -44,5 +50,9 @@ export abstract class EntityRepository<T extends Document> {
   async deleteMany(entityFilterQuery: FilterQuery<T>): Promise<boolean> {
     const deleteResult = await this.entityModel.deleteMany(entityFilterQuery);
     return deleteResult.deletedCount >= 1;
+  }
+
+  async count(): Promise<number> {
+    return this.entityModel.count();
   }
 }

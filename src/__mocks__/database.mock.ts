@@ -1,28 +1,19 @@
-export abstract class MockModel<T> {
-  protected abstract entityStub: T;
-
-  constructor(createEntityData: T) {
-    this.constructorSpy(createEntityData);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  constructorSpy(_createEntityData: T): void {}
-
-  findOne(): { exec: () => T } {
+export const MockModel = {
+  findOne() {
     return {
-      exec: (): T => this.entityStub,
+      exec: () => this.entityStub,
     };
-  }
+  },
 
-  async find(): Promise<T[]> {
+  find() {
     return [this.entityStub];
-  }
+  },
 
-  async save(): Promise<T> {
+  save() {
     return this.entityStub;
-  }
+  },
 
-  async findOneAndUpdate(): Promise<T> {
+  async findOneAndUpdate() {
     return this.entityStub;
-  }
-}
+  },
+};

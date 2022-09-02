@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { UserDto } from '../dto/user.dto';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { UserDto, UserFilterDto } from '../dto/user.dto';
 import { UserService } from '../service/user.service';
 
 @ApiTags('Users')
@@ -13,8 +13,28 @@ export class UserController {
     return this._userService.create(user);
   }
 
+  @ApiQuery({
+    name: 'userId',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'page',
+    type: String,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'search',
+    type: String,
+    required: false,
+  })
   @Get()
-  getAll() {
-    return this._userService.getAll();
+  getAll(@Query() filter: UserFilterDto) {
+    return this._userService.getAll(filter);
   }
 }

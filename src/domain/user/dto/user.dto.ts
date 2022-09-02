@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsEmail,
+  IsInt,
   IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
 } from 'class-validator';
-import { ObjectId } from 'mongoose';
 
 export class UserDto {
   @ApiProperty()
@@ -30,12 +31,33 @@ export class UserDto {
   @IsString()
   password: string;
 
-  @ApiProperty()
   @IsOptional()
   @IsString()
   preferred_currency?: string;
 
   @ApiProperty()
   @IsMongoId()
-  country: ObjectId;
+  country: string;
+}
+
+export class UserFilterDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  userId?: string;
+
+  @IsInt()
+  @Type(() => Number)
+  @IsOptional()
+  limit?: number;
+
+  @IsInt()
+  @Type(() => Number)
+  @IsOptional()
+  page?: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  search?: string;
 }

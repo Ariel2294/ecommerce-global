@@ -13,6 +13,9 @@ export class Users {
   @Prop()
   last_name: string;
 
+  @Prop()
+  timezone: string;
+
   @Prop({ unique: true })
   email: string;
 
@@ -30,7 +33,7 @@ export class Users {
     ref: Countries.name,
     index: true,
   })
-  country: string;
+  country;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);

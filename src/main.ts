@@ -20,7 +20,8 @@ async function bootstrap() {
 
   const environment =
     configService.get<string>('NODE_ENV') || process.env.NODE_ENV;
-
+  const corsOrigin =
+    configService.get<string>('CORS_ORIGIN') || process.env.CORS_ORIGIN;
   const config = new DocumentBuilder()
     .addApiKey(
       { type: 'apiKey', name: 'Authorization', in: 'header' },
@@ -51,6 +52,12 @@ async function bootstrap() {
     });
   }
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.enableCors({
+    origin: corsOrigin,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    preflightContinue: false,
+  });
   await app.listen(port, () => {
     Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });

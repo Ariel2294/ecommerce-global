@@ -29,6 +29,13 @@ import {
     UserVerificationsRepository,
     MongoErrorHandler,
   ],
+  exports: [
+    MongooseModule.forFeature([
+      { name: Users.name, schema: UsersSchema },
+      { name: Countries.name, schema: CountriesSchema },
+      { name: UsersVerifications.name, schema: UsersVerificationsSchema },
+    ]),
+  ],
   controllers: [UserController],
 })
 export class UserModule {}

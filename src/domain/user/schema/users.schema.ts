@@ -25,7 +25,7 @@ export class Users {
   @Prop()
   preferred_currency: string;
 
-  @Prop({ default: true })
+  @Prop({ default: false })
   active: boolean;
 
   @Prop({

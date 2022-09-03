@@ -11,14 +11,11 @@ export abstract class EntityRepository<T extends Document> {
 
   async findOne(
     entityFilterQuery: FilterQuery<T>,
-    projection?: Record<string, unknown>,
+    select?: string,
+    optionalFilter?: QueryOptions<T>,
   ): Promise<T | null> {
     return this.entityModel
-      .findOne(entityFilterQuery, {
-        _id: 0,
-        __v: 0,
-        ...projection,
-      })
+      .findOne(entityFilterQuery, select, optionalFilter)
       .exec();
   }
 

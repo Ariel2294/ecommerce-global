@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { WinstonModule } from 'nest-winston';
@@ -8,7 +8,9 @@ import { EcommerceGlobalConfig } from './config/ecommerce-global.config';
 import { EcommerceGlobalModule } from './config/ecommerce-global.module';
 import { EcommerceGlobalServiceValidateConfig } from './config/ecommerce-global.validate.config';
 import { AuthModule } from './domain/auth/auth.module';
+import { EncrytionAuth } from './domain/auth/utils/encryption-auth.util';
 import { UserModule } from './domain/user/user.module';
+import { JwtTokenVerifyMiddleware } from './shared/middlewares/jwt-token-verify.middleware';
 import { loggerOptions } from './utils/logger';
 
 @Module({
@@ -30,6 +32,19 @@ import { loggerOptions } from './utils/logger';
     WinstonModule.forRoot(loggerOptions),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EncrytionAuth],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(JwtTokenVerifyMiddleware)
+      .exclude(
+        {
+          path: '(.*)/auth/login',
+          method: RequestMethod.POST,
+        },
+        { path: '(.*)/auth/register', method: RequestMethod.POST },
+      )
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

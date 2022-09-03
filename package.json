@@ -27,11 +27,15 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/jwt": "^9.0.0",
     "@nestjs/mongoose": "^9.2.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.1.1",
+    "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "cryptr": "^6.0.3",
+    "dayjs": "^1.11.5",
     "husky": "^8.0.1",
     "mongoose": "^6.5.4",
     "nest-winston": "^1.7.0",
@@ -39,6 +43,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "swagger-ui-express": "^4.5.0",
+    "uuid": "^8.3.2",
     "winston": "^3.8.1"
   },
   "devDependencies": {

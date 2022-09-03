@@ -3,11 +3,9 @@ export const mockHello =
 
 export const mockEnv = {
   NODE_ENV: 'NODE_ENV',
-  PORT: '3333',
-};
-
-export const configServiceMock = {
-  get(key: string): string {
-    return mockEnv[key];
-  },
+  PORT: '9000',
+  DATABASE_URI: 'mongodb://user:password@host:port/db',
+  CORS_ORIGIN: '*',
+  TOKEN_ENCRYPTION: '12345',
+  JWT_SECRET: '123455',
 };

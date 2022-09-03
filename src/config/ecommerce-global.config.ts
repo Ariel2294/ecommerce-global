@@ -16,4 +16,14 @@ export class EcommerceGlobalConfig {
   get databaseURL(): string {
     return this.config.get('DATABASE_URI');
   }
+
+  get authConfig(): {
+    tokenEncryption: string;
+    jwtSecret: string;
+  } {
+    return {
+      tokenEncryption: this.config.get('TOKEN_ENCRYPTION'),
+      jwtSecret: this.config.get('JWT_SECRET'),
+    };
+  }
 }

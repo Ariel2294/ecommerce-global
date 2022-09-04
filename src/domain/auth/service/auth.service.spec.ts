@@ -17,11 +17,22 @@ import {
   mockUserAuth,
   mockUserAuthResponse,
   mockUserCredentials,
+  mockVerficationUDataUserFindAndUpdate,
+  mockVerificationDataFindOne,
+  mockVerificationDataFindOneAndUpdate,
 } from '../../../__mocks__/auth.mock';
+import { dataUserMock, userDtoMock } from '../../../__mocks__/users.mock';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import * as utils from '../utils/auth.utils';
 
 describe('AuthService', () => {
   let service: AuthService;
   let userRepository: UserRepository;
+  let userVerificationsRepository: UserVerificationsRepository;
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -58,6 +69,9 @@ describe('AuthService', () => {
 
     service = module.get<AuthService>(AuthService);
     userRepository = module.get<UserRepository>(UserRepository);
+    userVerificationsRepository = module.get<UserVerificationsRepository>(
+      UserVerificationsRepository,
+    );
   });
 
   it('should be defined', () => {
@@ -73,6 +87,113 @@ describe('AuthService', () => {
       const result = await service.login(mockUserCredentials);
 
       expect(result).toMatchObject(mockUserAuthResponse);
+    });
+  });
+
+  describe('create public users register', () => {
+    it('should create new user', async () => {
+      userRepository.create = jest.fn().mockReturnValueOnce(dataUserMock);
+      userVerificationsRepository.create = jest
+        .fn()
+        .mockResolvedValueOnce({ user: '63122c5a82bf6850c2bd00cf' });
+
+      const result = await userRepository.create(userDtoMock);
+
+      expect(result).toMatchObject({
+        _id: '63122c5a82bf6850c2bd00cf',
+      });
+    });
+
+    it('should  fail to create new user', async () => {
+      userRepository.create = jest
+        .fn()
+
+        .mockImplementationOnce(() => {
+          throw new InternalServerErrorException();
+        });
+      userVerificationsRepository.create = jest
+        .fn()
+        .mockImplementationOnce(() => {
+          throw new InternalServerErrorException();
+        });
+
+      try {
+        await userRepository.create(userDtoMock);
+      } catch (error) {
+        expect(error).toBeInstanceOf(InternalServerErrorException);
+        expect(error.status).toBe(500);
+        expect(error.message).toBe('Internal Server Error');
+      }
+    });
+  });
+
+  describe('verify account users', () => {
+    it('should  verify successfully', async () => {
+      userVerificationsRepository.findOne = jest
+        .fn()
+        .mockReturnValueOnce(mockVerificationDataFindOne);
+
+      userVerificationsRepository.findOneAndUpdate = jest
+        .fn()
+        .mockReturnValueOnce(mockVerificationDataFindOneAndUpdate);
+
+      userRepository.findOneAndUpdate = jest
+        .fn()
+        .mockReturnValueOnce(mockVerficationUDataUserFindAndUpdate);
+
+      const result = await service.verifyAccount(
+        '0093bde2-a46f-408d-af90-2a290ad939e1',
+      );
+
+      expect(result).toMatchObject({
+        message: 'Account validated successfully',
+      });
+    });
+
+    it('should fail due to expired token', async () => {
+      jest
+        .spyOn(utils, 'validationExpireTokenVerify')
+        .mockReturnValueOnce(true);
+      userVerificationsRepository.findOne = jest
+        .fn()
+        .mockReturnValueOnce(mockVerificationDataFindOne);
+
+      userVerificationsRepository.findOneAndUpdate = jest
+        .fn()
+        .mockReturnValueOnce(mockVerificationDataFindOneAndUpdate);
+
+      userRepository.findOneAndUpdate = jest
+        .fn()
+        .mockReturnValueOnce(mockVerficationUDataUserFindAndUpdate);
+
+      try {
+        await service.verifyAccount('0093bde2-a46f-408d-af90-2a290ad939e1');
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error.message).toBe('token has expired');
+      }
+    });
+
+    it('should fail because the token was already used', async () => {
+      mockVerificationDataFindOne.is_valid = false;
+      userVerificationsRepository.findOne = jest
+        .fn()
+        .mockReturnValueOnce(mockVerificationDataFindOne);
+
+      userVerificationsRepository.findOneAndUpdate = jest
+        .fn()
+        .mockReturnValueOnce(mockVerificationDataFindOneAndUpdate);
+
+      userRepository.findOneAndUpdate = jest
+        .fn()
+        .mockReturnValueOnce(mockVerficationUDataUserFindAndUpdate);
+
+      try {
+        await service.verifyAccount('0093bde2-a46f-408d-af90-2a290ad939e1');
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error.message).toBe('token was already used');
+      }
     });
   });
 });

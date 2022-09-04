@@ -1,8 +1,8 @@
 import { FilterQuery } from 'mongoose';
 import { UserFilterDto } from '../dto/user.dto';
-import { Users } from '../schema/users.schema';
+import { Users, UsersDocument } from '../schema/users.schema';
 
-export const userCreateDataResponse = (user) => {
+export const userCreateDataResponse = (user: UsersDocument) => {
   return {
     _id: user._id,
   };

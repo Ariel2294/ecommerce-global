@@ -9,6 +9,7 @@ import { MongoErrorHandler } from '../../database/handlers/mongo-error-handler';
 import { EncrytionAuth } from './utils/encryption-auth.util';
 import { JwtModule } from '@nestjs/jwt';
 import { EcommerceGlobalModule } from '../../config/ecommerce-global.module';
+import { UserService } from '../user/service/user.service';
 
 @Module({
   providers: [
@@ -18,6 +19,7 @@ import { EcommerceGlobalModule } from '../../config/ecommerce-global.module';
     UserVerificationsRepository,
     MongoErrorHandler,
     EncrytionAuth,
+    UserService,
   ],
   controllers: [AuthController],
   imports: [

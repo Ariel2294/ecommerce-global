@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class EcommerceGlobalEnv {
   @IsString()
@@ -12,4 +12,8 @@ export class EcommerceGlobalEnv {
   @IsString()
   @IsNotEmpty()
   DATABASE_URI: string;
+
+  @IsString()
+  @IsOptional()
+  TZ = 'America/Mexico_City';
 }

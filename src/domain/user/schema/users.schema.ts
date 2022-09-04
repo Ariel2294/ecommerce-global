@@ -25,8 +25,14 @@ export class Users {
   @Prop()
   preferred_currency: string;
 
-  @Prop({ default: false })
+  @Prop({ default: true })
   active: boolean;
+
+  @Prop({ default: false })
+  newsletter: boolean;
+
+  @Prop({ default: false })
+  verifyAccount: boolean;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,

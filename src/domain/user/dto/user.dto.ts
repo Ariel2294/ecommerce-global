@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsBoolean,
   IsEmail,
   IsInt,
   IsMongoId,
@@ -10,34 +11,40 @@ import {
 } from 'class-validator';
 
 export class UserDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Osmín' })
   @IsNotEmpty()
   @IsString()
   first_name: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'López' })
   @IsNotEmpty()
   @IsString()
   last_name: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'mail@domain.com' })
   @IsNotEmpty()
   @IsString()
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'mySecurePassword' })
   @IsNotEmpty()
   @IsString()
   password: string;
 
+  @ApiProperty({ example: 'USD', default: null })
   @IsOptional()
   @IsString()
   preferred_currency?: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '631203e9d75a73ce254fda1a' })
   @IsMongoId()
   country: string;
+
+  @ApiProperty({ example: false })
+  @IsOptional()
+  @IsBoolean()
+  newsLetterSubscription?: boolean;
 }
 
 export class UserFilterDto {

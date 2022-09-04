@@ -10,6 +10,7 @@ import { UserVerificationsRepository } from '../repository/user-verification.rep
 import { UsersVerifications } from '../schema/users-verification.schema';
 import { MockModel } from '../../../__mocks__/database.mock';
 import { InternalServerErrorException } from '@nestjs/common';
+import { EcommerceGlobalModule } from '../../../config/ecommerce-global.module';
 
 describe('UserService', () => {
   let service: UserService;
@@ -18,12 +19,13 @@ describe('UserService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [WinstonModule.forRoot({ silent: true })],
+      imports: [WinstonModule.forRoot({ silent: true }), EcommerceGlobalModule],
       providers: [
         UserService,
         UserRepository,
         UserVerificationsRepository,
         MongoErrorHandler,
+
         {
           provide: getModelToken(Users.name),
           useValue: MockModel,

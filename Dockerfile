@@ -15,8 +15,6 @@ COPY --from=builder /app/builder/package.json ./
 
 RUN npm install --prod
 
-RUN npm run prisma
-
 EXPOSE $PORT
 
 CMD ["npm", "run", "start:prod"]

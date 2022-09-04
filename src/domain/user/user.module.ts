@@ -14,6 +14,7 @@ import {
   Countries,
   CountriesSchema,
 } from '../../shared/schemas/countries.schema';
+import { EcommerceGlobalConfig } from '../../config/ecommerce-global.config';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import {
     UserRepository,
     UserVerificationsRepository,
     MongoErrorHandler,
+    EcommerceGlobalConfig,
   ],
   exports: [
     MongooseModule.forFeature([

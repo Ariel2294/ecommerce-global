@@ -16,6 +16,7 @@ import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
 import * as timezone from 'dayjs/plugin/timezone';
 import { userFindQueryOptions } from '../util/mongoose.user.util';
+import { EcommerceGlobalConfig } from '../../../config/ecommerce-global.config';
 
 @Injectable()
 export class UserService {
@@ -23,6 +24,8 @@ export class UserService {
     private readonly _userRepository: UserRepository,
     private readonly _userVerificationsRepository: UserVerificationsRepository,
     private readonly _mongoErrorHandler: MongoErrorHandler,
+    private readonly _ecommerceGlobalConfig: EcommerceGlobalConfig,
+
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
@@ -84,7 +87,7 @@ export class UserService {
     return this._userVerificationsRepository.create({
       user: userId,
       token_expiration_date: dayjs()
-        .tz('America/El_Salvador')
+        .tz(this._ecommerceGlobalConfig.defaultTimeZone)
         .add(15, 'minutes'),
     });
   }

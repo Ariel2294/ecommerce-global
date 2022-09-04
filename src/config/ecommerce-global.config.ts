@@ -26,4 +26,8 @@ export class EcommerceGlobalConfig {
       jwtSecret: this.config.get('JWT_SECRET'),
     };
   }
+
+  get defaultTimeZone(): string {
+    return this.config.get('TZ');
+  }
 }

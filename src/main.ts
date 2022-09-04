@@ -17,7 +17,6 @@ async function bootstrap() {
 
   const port = configService.get<number>('PORT') || 3000;
   const globalPrefix = 'api';
-
   const environment =
     configService.get<string>('NODE_ENV') || process.env.NODE_ENV;
   const corsOrigin =
@@ -51,13 +50,16 @@ async function bootstrap() {
       swaggerOptions: { defaultModelsExpandDepth: -1 },
     });
   }
+
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
   app.enableCors({
     origin: corsOrigin,
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     preflightContinue: false,
   });
+
   await app.listen(port, () => {
     Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });

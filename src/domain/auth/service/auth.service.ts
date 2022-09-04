@@ -33,7 +33,7 @@ export class AuthService {
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
-  async login(credentials: AuthLoginDto) {
+  async login(credentials: AuthLoginDto, ip: string) {
     const context = createContextWinston(
       this.constructor.name,
       this.login.name,
@@ -44,6 +44,7 @@ export class AuthService {
     try {
       this.logger.debug('Attempting  login user', {
         ...context,
+        ipAddress: ip,
       });
 
       user = await this._userRepository.findOne(

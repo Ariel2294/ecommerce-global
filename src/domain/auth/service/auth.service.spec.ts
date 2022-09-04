@@ -84,7 +84,7 @@ describe('AuthService', () => {
       service._loginJwtReponse = jest
         .fn()
         .mockReturnValueOnce(mockUserAuthResponse);
-      const result = await service.login(mockUserCredentials);
+      const result = await service.login(mockUserCredentials, '127.0.0.1');
 
       expect(result).toMatchObject(mockUserAuthResponse);
     });

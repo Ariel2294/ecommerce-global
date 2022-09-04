@@ -10,6 +10,7 @@ import { EcommerceGlobalServiceValidateConfig } from './config/ecommerce-global.
 import { AuthModule } from './domain/auth/auth.module';
 import { EncrytionAuth } from './domain/auth/utils/encryption-auth.util';
 import { UserModule } from './domain/user/user.module';
+import { IpAddressVerifyMiddleware } from './shared/middlewares/ip-verify.middleware';
 import { JwtTokenVerifyMiddleware } from './shared/middlewares/jwt-token-verify.middleware';
 import { loggerOptions } from './utils/logger';
 
@@ -45,6 +46,8 @@ export class AppModule {
         },
         { path: '(.*)/auth/register', method: RequestMethod.POST },
       )
+      .forRoutes({ path: '*', method: RequestMethod.ALL })
+      .apply(IpAddressVerifyMiddleware)
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

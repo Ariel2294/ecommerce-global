@@ -59,7 +59,7 @@ async function bootstrap() {
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     preflightContinue: false,
   });
-
+  app.setGlobalPrefix(globalPrefix);
   await app.listen(port, () => {
     Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });

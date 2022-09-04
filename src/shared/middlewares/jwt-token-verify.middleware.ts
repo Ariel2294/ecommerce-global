@@ -26,6 +26,8 @@ export class JwtTokenVerifyMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
+    const ip = req.header('x-forwarded-for') || req.socket.remoteAddress;
+    console.log(ip);
     if (this._configService.environmentDevStatus.nodeEnv !== 'develop') {
       const context = createContextWinston(
         this.constructor.name,

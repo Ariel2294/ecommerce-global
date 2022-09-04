@@ -1,20 +1,21 @@
-FROM node:16-alpine
+FROM node:16-alpine as builder
 
-ARG NODE_ENV
-ARG PORT=3333
+WORKDIR /app/builder
+COPY . .
+RUN npm install
+RUN npm install -g @nestjs/cli
+RUN npm run build
+
+FROM node:16-alpine
 
 WORKDIR /app
 
-COPY dist/ ./dist
-COPY package*.json ./
+COPY --from=builder /app/builder/dist ./dist
+COPY --from=builder /app/builder/package.json ./
 
-ENV NODE_ENV=$NODE_ENV
-ENV PORT=$PORT
-ENV HUSKY_SKIP_INSTALL=1
+RUN npm install --prod
 
-RUN npm ci --prod \
-    && rm -Rf ~/.cache ~/.npm
-
+RUN npm run prisma
 
 EXPOSE $PORT
 

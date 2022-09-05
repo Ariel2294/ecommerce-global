@@ -11,6 +11,8 @@ import { UsersVerifications } from '../schema/users-verification.schema';
 import { MockModel } from '../../../__mocks__/database.mock';
 import { InternalServerErrorException } from '@nestjs/common';
 import { EcommerceGlobalModule } from '../../../config/ecommerce-global.module';
+import { ConfigService } from '@nestjs/config';
+import { mockConfigService } from '../../../__mocks__/ecommerce-global.mock';
 
 describe('UserService', () => {
   let service: UserService;
@@ -33,6 +35,10 @@ describe('UserService', () => {
         {
           provide: getModelToken(UsersVerifications.name),
           useValue: MockModel,
+        },
+        {
+          provide: ConfigService,
+          useValue: mockConfigService,
         },
       ],
     }).compile();

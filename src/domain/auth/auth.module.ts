@@ -10,6 +10,8 @@ import { EncrytionAuth } from './utils/encryption-auth.util';
 import { JwtModule } from '@nestjs/jwt';
 import { EcommerceGlobalModule } from '../../config/ecommerce-global.module';
 import { UserService } from '../user/service/user.service';
+import { GeolocationService } from '../geolocation/service/geolocation.service';
+import { GeolocationModule } from '../geolocation/geolocation.module';
 
 @Module({
   providers: [
@@ -20,9 +22,11 @@ import { UserService } from '../user/service/user.service';
     MongoErrorHandler,
     EncrytionAuth,
     UserService,
+    GeolocationService,
   ],
   controllers: [AuthController],
   imports: [
+    GeolocationModule,
     UserModule,
     JwtModule.registerAsync({
       inject: [EcommerceGlobalConfig],

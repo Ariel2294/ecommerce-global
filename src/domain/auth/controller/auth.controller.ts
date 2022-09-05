@@ -14,7 +14,8 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  login(@Body() credentials: AuthLoginDto, @Headers('ip-address') ip: string) {
+  login(@Body() credentials: AuthLoginDto, @Headers() headers) {
+    const ip = headers['ip-address'];
     return this._authService.login(credentials, ip);
   }
 

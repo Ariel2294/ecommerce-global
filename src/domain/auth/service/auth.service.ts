@@ -18,6 +18,8 @@ import { getCurrentTime } from '../../../utils';
 import { EcommerceGlobalConfig } from '../../../config/ecommerce-global.config';
 import { validationExpireTokenVerify } from '../utils/auth.utils';
 import { UsersVerifications } from '../../user/schema/users-verification.schema';
+import { GeolocationService } from '../../geolocation/service/geolocation.service';
+import { GeolocationInterface } from '../../geolocation/interfaces/geolocation.interface';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +29,7 @@ export class AuthService {
     private readonly _encrytionAuth: EncrytionAuth,
     private readonly _mongoErrorHandler: MongoErrorHandler,
     private readonly _jwtService: JwtService,
+    private readonly _geolocationService: GeolocationService,
 
     private readonly _ecommerceGlobalConfig: EcommerceGlobalConfig,
 
@@ -64,17 +67,25 @@ export class AuthService {
     if (!user || !isMatch) {
       throw new UnauthorizedException('Email or password are incorrect');
     }
-    return this._loginJwtReponse(user);
+    const geoLocation = await this._geolocationService.getLocation(
+      ip,
+      user._id,
+    );
+
+    return this._loginJwtReponse(user, geoLocation.geolocationData);
   }
 
-  _loginJwtReponse(user) {
+  _loginJwtReponse(user, geoLocation: GeolocationInterface) {
     const payload = {
       username: user.email,
-      sub: user._id,
+      userId: user._id,
     };
     return {
       access_token: this._encrytionAuth.encrypt(this._jwtService.sign(payload)),
       verifyAccount: user.verifyAccount,
+      country: geoLocation.country.name,
+      flag: geoLocation.country.flag.file,
+      timeZone: geoLocation.time.timezone,
     };
   }
 

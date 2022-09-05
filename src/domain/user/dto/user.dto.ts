@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+
 import {
   IsBoolean,
   IsEmail,
-  IsInt,
   IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
 } from 'class-validator';
+import { FilterQueryDto } from '../../../shared/dto/filter.dto';
 
 export class UserDto {
   @ApiProperty({ example: 'Osmín' })
@@ -47,24 +47,9 @@ export class UserDto {
   newsLetterSubscription?: boolean;
 }
 
-export class UserFilterDto {
+export class UserFilterDto extends FilterQueryDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
   userId?: string;
-
-  @IsInt()
-  @Type(() => Number)
-  @IsOptional()
-  limit?: number;
-
-  @IsInt()
-  @Type(() => Number)
-  @IsOptional()
-  page?: number;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  search?: string;
 }

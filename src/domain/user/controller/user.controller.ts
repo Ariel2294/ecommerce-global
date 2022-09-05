@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UserDto, UserFilterDto } from '../dto/user.dto';
 import { UserService } from '../service/user.service';
 
 @ApiTags('Users')
+@ApiBearerAuth('JWT-auth')
 @Controller('user')
 export class UserController {
   constructor(private readonly _userService: UserService) {}

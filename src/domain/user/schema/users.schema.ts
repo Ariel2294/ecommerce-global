@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import { Countries } from '../../../shared/schemas/countries.schema';
+import { Countries } from '../../countries/schemas/countries.schema';
 
 export type UsersDocument = Users & Document;
 

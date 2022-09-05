@@ -15,6 +15,7 @@ import { JwtTokenVerifyMiddleware } from './shared/middlewares/jwt-token-verify.
 import { loggerOptions } from './utils/logger';
 import { GeolocationModule } from './domain/geolocation/geolocation.module';
 import { GeolocationService } from './domain/geolocation/service/geolocation.service';
+import { CountriesModule } from './domain/countries/countries.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { GeolocationService } from './domain/geolocation/service/geolocation.ser
     UserModule,
     WinstonModule.forRoot(loggerOptions),
     GeolocationModule,
+    CountriesModule,
   ],
   controllers: [AppController],
   providers: [AppService, EncrytionAuth, GeolocationService],
@@ -51,6 +53,8 @@ export class AppModule {
         },
         { path: '(.*)/auth/register', method: RequestMethod.POST },
         { path: '(.*)/auth/verify-account/:token', method: RequestMethod.GET },
+        { path: '(.*)/countries', method: RequestMethod.GET },
+        { path: '(.*)/cities', method: RequestMethod.GET },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }

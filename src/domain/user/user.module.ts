@@ -10,11 +10,12 @@ import {
   UsersVerificationsSchema,
 } from './schema/users-verification.schema';
 import { UserVerificationsRepository } from './repository/user-verification.repository';
+
+import { EcommerceGlobalConfig } from '../../config/ecommerce-global.config';
 import {
   Countries,
   CountriesSchema,
-} from '../../shared/schemas/countries.schema';
-import { EcommerceGlobalConfig } from '../../config/ecommerce-global.config';
+} from '../countries/schemas/countries.schema';
 
 @Module({
   imports: [
@@ -31,13 +32,7 @@ import { EcommerceGlobalConfig } from '../../config/ecommerce-global.config';
     MongoErrorHandler,
     EcommerceGlobalConfig,
   ],
-  exports: [
-    MongooseModule.forFeature([
-      { name: Users.name, schema: UsersSchema },
-      { name: Countries.name, schema: CountriesSchema },
-      { name: UsersVerifications.name, schema: UsersVerificationsSchema },
-    ]),
-  ],
+  exports: [MongooseModule],
   controllers: [UserController],
 })
 export class UserModule {}

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserDto } from '../../../domain/user/dto/user.dto';
 import { UserService } from '../../../domain/user/service/user.service';
@@ -12,9 +12,11 @@ export class AuthController {
     private readonly _authService: AuthService,
     private readonly _userService: UserService,
   ) {}
-  @Post()
-  login(@Body() credentials: AuthLoginDto) {
-    return this._authService.login(credentials);
+
+  @Post('login')
+  login(@Body() credentials: AuthLoginDto, @Headers() headers) {
+    const ip = headers['ip-address'];
+    return this._authService.login(credentials, ip);
   }
 
   @Post('register')

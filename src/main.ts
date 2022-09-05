@@ -21,6 +21,7 @@ async function bootstrap() {
     configService.get<string>('NODE_ENV') || process.env.NODE_ENV;
   const corsOrigin =
     configService.get<string>('CORS_ORIGIN') || process.env.CORS_ORIGIN;
+  app.setGlobalPrefix(globalPrefix);
   const config = new DocumentBuilder()
     .addApiKey(
       { type: 'apiKey', name: 'Authorization', in: 'header' },
@@ -45,7 +46,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  if (environment === 'develop') {
+  if (environment === 'production') {
     SwaggerModule.setup('docs', app, document, {
       swaggerOptions: { defaultModelsExpandDepth: -1 },
     });

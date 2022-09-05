@@ -10,8 +10,11 @@ import { EcommerceGlobalServiceValidateConfig } from './config/ecommerce-global.
 import { AuthModule } from './domain/auth/auth.module';
 import { EncrytionAuth } from './domain/auth/utils/encryption-auth.util';
 import { UserModule } from './domain/user/user.module';
+import { IpAddressVerifyMiddleware } from './shared/middlewares/ip-verify.middleware';
 import { JwtTokenVerifyMiddleware } from './shared/middlewares/jwt-token-verify.middleware';
 import { loggerOptions } from './utils/logger';
+import { GeolocationModule } from './domain/geolocation/geolocation.module';
+import { GeolocationService } from './domain/geolocation/service/geolocation.service';
 
 @Module({
   imports: [
@@ -30,13 +33,16 @@ import { loggerOptions } from './utils/logger';
     AuthModule,
     UserModule,
     WinstonModule.forRoot(loggerOptions),
+    GeolocationModule,
   ],
   controllers: [AppController],
-  providers: [AppService, EncrytionAuth],
+  providers: [AppService, EncrytionAuth, GeolocationService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
+      .apply(IpAddressVerifyMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL })
       .apply(JwtTokenVerifyMiddleware)
       .exclude(
         {
@@ -44,6 +50,7 @@ export class AppModule {
           method: RequestMethod.POST,
         },
         { path: '(.*)/auth/register', method: RequestMethod.POST },
+        { path: '(.*)/auth/verify-account/:token', method: RequestMethod.GET },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }

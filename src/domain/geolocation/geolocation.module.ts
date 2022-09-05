@@ -1,6 +1,5 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { GeolocationService } from './service/geolocation.service';
-import { GeolocationController } from './controller/geolocation.controller';
 import { EcommerceGlobalModule } from '../../config/ecommerce-global.module';
 import { EcommerceGlobalConfig } from '../../config/ecommerce-global.config';
 import * as redisStore from 'cache-manager-redis-store';
@@ -21,6 +20,5 @@ import { HttpModule } from '@nestjs/axios';
     }),
   ],
   exports: [HttpModule, CacheModule],
-  controllers: [GeolocationController],
 })
 export class GeolocationModule {}

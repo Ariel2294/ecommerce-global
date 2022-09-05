@@ -49,7 +49,7 @@ export abstract class EntityRepository<T extends Document> {
     return deleteResult.deletedCount >= 1;
   }
 
-  async count(): Promise<number> {
-    return this.entityModel.count();
+  async count(entityFilterQuery?: FilterQuery<T>): Promise<number> {
+    return this.entityModel.count(entityFilterQuery);
   }
 }

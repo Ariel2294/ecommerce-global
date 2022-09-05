@@ -74,7 +74,7 @@ export class UserService {
         userQueryParams,
         userQueryOption,
       );
-      const count = await this._userRepository.count();
+      const count = await this._userRepository.count(userQueryParams);
       return userFindDataResponse(filter, users, count);
     } catch (error) {
       this._mongoErrorHandler.handleMongooseErrors(error, this.getAll.name);

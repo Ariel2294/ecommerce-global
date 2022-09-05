@@ -58,6 +58,7 @@ export class AppModule {
         { path: '(.*)/auth/verify-account/:token', method: RequestMethod.GET },
         { path: '(.*)/countries', method: RequestMethod.GET },
         { path: '(.*)/cities', method: RequestMethod.GET },
+        { path: '(.*)/products', method: RequestMethod.GET },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL })
       .apply(PublicGeoLocationMiddleware)

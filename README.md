@@ -1,49 +1,50 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# E-Commerce Global API
+# Requerimientos
+- [Node.js](https://nodejs.org/es/download/) desarrollado en la versión LTS: ```v16.14.0```
+- [Docker](https://docs.docker.com/get-docker/) Para pruebas locales y despliegue en la nube
+- [Docker Compose](https://docs.docker.com/compose/install/) Orquestar nuestros contenedores en local simulando la instalación en la nube
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+- [MongoDB](https://www.mongodb.com/docs/) Se usa la base de datos MongoDB administrada con ```@nestjs/mongoose```
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- [Redis](https://redis.io/docs/) Se usa redis para guardar información relevante para geolocalización y manejo de monedas
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Tecnologías
+- [IP GEO API](https://getgeoapi.com/) Api extraer datos de geolocalización y conversión de divisas.
 
+
+- [Wasabi](https://wasabi.com/) Servicio cloud para almacenamiento de imagenes o archivos.
+
+- [Caprover](https://caprover.com/) PaaS para el despligue de aplicaciónes con docker.
+
+## Descripción
+
+Este proyecto está desarrollado en [Nest](https://github.com/nestjs/nest) framework con typescript.
+
+## Iniciar el proyecto en desarrollo
 ## Installation
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## Establecer variables de entorno en nuestro archivo .ENV
+- Las variables de entorno para ejecutar pruebas exitosas se comparten en este archivo de [MEGA](https://mega.nz/file/ZIQihRrL). La clave para descifrar el archivo se compartira por correo electrónico.
+## Ejecutar Docker
 
-```bash
-# development
-$ npm run start
+- Ejecuta el comando ```docker-compose up``` para correr los contenedores.
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+## Probar el proyecto en staging
+
+## Documentación y URL staging
+
+- El proyecto está desplegado en un servidor privado virtual, para acceder al servicios es en https://ecommerce.stg.arielclaros.com/ .
+
+
+- Para acceder a la documentación https://ecommerce.stg.arielclaros.com/docs.
+
+
 
 ## Test
 
@@ -51,23 +52,47 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
 # test coverage
 $ npm run test:cov
 ```
 
-## Support
+# Tareas Finalizadas
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- [X] Configuración del proyecto.
+- [X] Implementación de base de datos MongoDB.
+- [X] JWT para la autenticación de usurios.
+- [X] Static Token para proteger la rutas públicas.
+- [X] Coversión de divisa.
+- [X] Geolocalización por dirección IP.
+- [X] Estrategia de caché para manejo de datos de geolocalización y divisa.
+- [X] Test unitarios.
+- [X] Mocks de datos para test.
+- [X] Integración de S3.
+- [X] Calculo de precios segun geolocalización.
+- [X] Despliegue continuo con caprover.
+- [X] Manejo de timezone para fechas.
+- [X] Sistema de logger con Winston.
+- [X] Git action para el despligue el cambio de versión del proyecto en casa paso a develop.
+- [X] Crud Productos.
+- [X] Create y get all de Usuarios.
+- [X] Get All de categorias, ciudades y paises.
+- [X] Paginación de datos.
+- [X] Documentación api con Swagger.
+- [X] Configuración de pre-commit con husky.
 
-## Stay in touch
+# Tareas No Finalizadas
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- [ ] Actualizar usuarios.
+- [ ] Crud completo de ciudades y paises.
+- [ ] Crud completo de categorias.
+- [ ] Estrategia de monitoreo de logs en grafana con loki.
+- [ ] Crud de reviews a productos.
+- [ ] Mostrar productos ordenados por reviews.
+- [ ] Implementación de google Analytics.
+- [ ] Implementación de recaptcha.
 
-## License
 
-Nest is [MIT licensed](LICENSE).
+
+
+# NOTAS
+- La documentación se muestra en producción por ser con fines de prueba técnica.

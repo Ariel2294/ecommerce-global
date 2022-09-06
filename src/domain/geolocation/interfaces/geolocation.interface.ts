@@ -95,3 +95,8 @@ export interface CurrencyInterface {
   rates: object;
   status: string;
 }
+
+export interface GeolocationData {
+  geolocationData: GeolocationInterface;
+  currencyData: CurrencyInterface;
+}

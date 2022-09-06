@@ -30,7 +30,7 @@ export class GeolocationService {
   ) {}
 
   async getLocation(ip: string, userId: string) {
-    const key = `${this.cacheGeoLocationKeyString}-${userId}`;
+    const key = `${this.cacheGeoLocationKeyString}-${userId || ip}`;
     let valueCache: GeolocationInterface = await this.cacheManager.get(key);
     if (!valueCache) {
       valueCache = await this._setCacheGeolocation(key, ip);

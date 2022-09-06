@@ -16,6 +16,8 @@ import { loggerOptions } from './utils/logger';
 import { GeolocationModule } from './domain/geolocation/geolocation.module';
 import { GeolocationService } from './domain/geolocation/service/geolocation.service';
 import { CountriesModule } from './domain/countries/countries.module';
+import { ProductsModule } from './domain/products/products.module';
+import { PublicGeoLocationMiddleware } from './shared/middlewares/public-geolocation.middleware';
 
 @Module({
   imports: [
@@ -36,6 +38,7 @@ import { CountriesModule } from './domain/countries/countries.module';
     WinstonModule.forRoot(loggerOptions),
     GeolocationModule,
     CountriesModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService, EncrytionAuth, GeolocationService],
@@ -55,7 +58,11 @@ export class AppModule {
         { path: '(.*)/auth/verify-account/:token', method: RequestMethod.GET },
         { path: '(.*)/countries', method: RequestMethod.GET },
         { path: '(.*)/cities', method: RequestMethod.GET },
+        { path: '(.*)/products', method: RequestMethod.GET },
+        { path: '(.*)/products/:productId', method: RequestMethod.PATCH },
       )
+      .forRoutes({ path: '*', method: RequestMethod.ALL })
+      .apply(PublicGeoLocationMiddleware)
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

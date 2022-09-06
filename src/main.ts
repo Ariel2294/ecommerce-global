@@ -23,10 +23,7 @@ async function bootstrap() {
     configService.get<string>('CORS_ORIGIN') || process.env.CORS_ORIGIN;
   app.setGlobalPrefix(globalPrefix);
   const config = new DocumentBuilder()
-    .addApiKey(
-      { type: 'apiKey', name: 'Authorization', in: 'header' },
-      'StaticToken',
-    )
+    .addApiKey({ type: 'apiKey', name: 'ApiKey', in: 'header' }, 'StaticToken')
     .addBearerAuth(
       {
         type: 'http',
@@ -56,7 +53,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: corsOrigin,
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'ApiKey', 'ip-address'],
     methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     preflightContinue: false,
   });

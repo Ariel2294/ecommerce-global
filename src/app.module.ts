@@ -59,6 +59,7 @@ export class AppModule {
         { path: '(.*)/countries', method: RequestMethod.GET },
         { path: '(.*)/cities', method: RequestMethod.GET },
         { path: '(.*)/products', method: RequestMethod.GET },
+        { path: '(.*)/products/:productId', method: RequestMethod.PATCH },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL })
       .apply(PublicGeoLocationMiddleware)

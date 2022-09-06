@@ -75,3 +75,9 @@ export class ProductFilterDto extends FilterQueryDto {
   @IsString()
   categoryId?: string;
 }
+
+export class UploadImagesParamsDto {
+  @IsNotEmpty()
+  @IsString()
+  productId: string;
+}

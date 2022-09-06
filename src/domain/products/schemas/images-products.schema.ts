@@ -6,8 +6,8 @@ export type ImagesProductsDocument = ImagesProducts & Document;
 
 @Schema()
 export class ImagesProducts extends Document {
-  @Prop()
-  key: string;
+  @Prop({ type: Object })
+  image: string;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,

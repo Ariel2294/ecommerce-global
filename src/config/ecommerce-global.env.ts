@@ -54,4 +54,20 @@ export class EcommerceGlobalEnv {
   @IsString()
   @IsNotEmpty()
   CURRENCY_EXPIRE_HOUR = '23:59:59';
+
+  @IsString()
+  @IsNotEmpty()
+  WS_BUCKET_NAME: string;
+
+  @IsString()
+  @IsNotEmpty()
+  WS_ACCESS_KEYID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  WS_SECRET_ACCESS_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  WS_ENDPOINT: string;
 }

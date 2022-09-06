@@ -4,16 +4,28 @@ import {
   Get,
   Headers,
   Param,
+  Patch,
   Post,
   Put,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GeolocationData } from '../../geolocation/interfaces/geolocation.interface';
 import {
   ProductCreateDto,
   ProductDto,
   ProductFilterDto,
+  UploadImagesParamsDto,
 } from '../dto/product.dto';
 import { ProductsService } from '../service/products.service';
 
@@ -64,5 +76,28 @@ export class ProductsController {
       headers['geo-location'],
     );
     return this._productsService.getAll(filter, geolocationData);
+  }
+
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        images: {
+          type: 'array',
+          items: { type: 'string', format: 'binary' },
+        },
+      },
+    },
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth('JWT-auth')
+  @ApiParam({ name: 'productId', type: String, required: true })
+  @Patch(':productId')
+  @UseInterceptors(FilesInterceptor('images'))
+  uploadFile(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Param() params: UploadImagesParamsDto,
+  ) {
+    return this._productsService.uploadImagesProducts(params.productId, files);
   }
 }

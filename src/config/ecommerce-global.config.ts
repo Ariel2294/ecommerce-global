@@ -66,4 +66,18 @@ export class EcommerceGlobalConfig {
       currencyExpireHour: this.config.get('CURRENCY_EXPIRE_HOUR'),
     };
   }
+
+  get s3Config(): {
+    wsBucketName: string;
+    wsAccessKeyid: string;
+    wsSecretAccessKey: string;
+    wsEndpoint: string;
+  } {
+    return {
+      wsBucketName: this.config.get('WS_BUCKET_NAME'),
+      wsAccessKeyid: this.config.get('WS_ACCESS_KEYID'),
+      wsSecretAccessKey: this.config.get('WS_SECRET_ACCESS_KEY'),
+      wsEndpoint: this.config.get('WS_ENDPOINT'),
+    };
+  }
 }

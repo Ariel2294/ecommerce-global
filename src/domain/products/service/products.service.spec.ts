@@ -1,6 +1,7 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { WinstonModule } from 'nest-winston';
+import { S3Service } from '../../../s3/service/s3.service';
 import { MongoErrorHandler } from '../../../database/handlers/mongo-error-handler';
 import { MockModel } from '../../../__mocks__/database.mock';
 import { DescriptionProductRepository } from '../repository/description-product.repository';
@@ -14,13 +15,17 @@ import { PricesProducts } from '../schemas/prices-products.schema';
 import { Products } from '../schemas/products.schema';
 import { ReviewsProducts } from '../schemas/reviews-products.schema';
 import { ProductsService } from './products.service';
+import { EcommerceGlobalConfig } from '../../../config/ecommerce-global.config';
+import { EcommerceGlobalModule } from '../../../config/ecommerce-global.module';
+import { ConfigService } from '@nestjs/config';
+import { mockConfigService } from '../../../__mocks__/ecommerce-global.mock';
 
 describe('ProductsService', () => {
   let service: ProductsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [WinstonModule.forRoot({ silent: true })],
+      imports: [WinstonModule.forRoot({ silent: true }), EcommerceGlobalModule],
       providers: [
         ProductsService,
         ProductRepository,
@@ -28,6 +33,8 @@ describe('ProductsService', () => {
         PriceRepository,
         ImageProductRepository,
         MongoErrorHandler,
+        S3Service,
+        EcommerceGlobalConfig,
         {
           provide: getModelToken(Categories.name),
           useValue: MockModel,
@@ -51,6 +58,10 @@ describe('ProductsService', () => {
         {
           provide: getModelToken(ReviewsProducts.name),
           useValue: MockModel,
+        },
+        {
+          provide: ConfigService,
+          useValue: mockConfigService,
         },
       ],
     }).compile();

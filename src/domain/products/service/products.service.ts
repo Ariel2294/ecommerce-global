@@ -1,4 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { MongoErrorHandler } from '../../../database/handlers/mongo-error-handler';
 import { Logger } from 'winston';
@@ -20,6 +24,7 @@ import {
 } from '../utils/product.util';
 import { GeolocationData } from '../../geolocation/interfaces/geolocation.interface';
 import { ImageProductRepository } from '../repository/image-product.repository';
+import { S3Service } from '../../../s3/service/s3.service';
 
 @Injectable()
 export class ProductsService {
@@ -29,6 +34,7 @@ export class ProductsService {
     private readonly _priceRepository: PriceRepository,
     private readonly _imageProductRepository: ImageProductRepository,
     private readonly _mongoErrorHandler: MongoErrorHandler,
+    private readonly _s3Service: S3Service,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
@@ -89,6 +95,63 @@ export class ProductsService {
     }
   }
 
+  async uploadImagesProducts(
+    productId: string,
+    files: Array<Express.Multer.File>,
+  ) {
+    const context = createContextWinston(
+      this.constructor.name,
+      this.uploadImagesProducts.name,
+    );
+
+    try {
+      this.logger.debug('Attempting  to upload image', {
+        ...context,
+      });
+      await Promise.all(
+        files.map((image) => this._uploadImage(image, productId)),
+      );
+      return {
+        message: 'Uploaded files successfully',
+      };
+    } catch (error) {
+      this.logger.error('Error to upload images', {
+        ...context,
+        message: error.message,
+      });
+
+      throw new InternalServerErrorException('Internal Server Error');
+    }
+  }
+
+  async _uploadImage(image: Express.Multer.File, productId: string) {
+    if (image) {
+      const createImage = await this._imageProductRepository.create({
+        productId,
+      });
+
+      const fileUpload = await this._s3Service.uploadFile(
+        image,
+        `products/${productId}`,
+        createImage._id,
+      );
+      const dataImage = {
+        key: fileUpload.key,
+        location: fileUpload.Location,
+        mimeType: image.mimetype,
+      };
+
+      await this._imageProductRepository.findOneAndUpdate(
+        {
+          _id: createImage._id,
+        },
+        {
+          image: dataImage,
+        },
+      );
+    }
+  }
+
   async getAll(filter: ProductFilterDto, geolocationData: GeolocationData) {
     const context = createContextWinston(
       this.constructor.name,
@@ -145,15 +208,22 @@ export class ProductsService {
       productId: product._id,
     });
 
-    const images = await this._imageProductRepository.find({
+    let images = await this._imageProductRepository.find({
       productId: product._id,
     });
 
+    images = await Promise.all(
+      images.map((imageData) => this._getImagesUrl(imageData.image)),
+    );
     return {
       ...product._doc,
       prices,
       descriptions,
       images,
     };
+  }
+
+  async _getImagesUrl(dataImage) {
+    return await this._s3Service.getFileUrl(dataImage?.key);
   }
 }

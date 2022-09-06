@@ -28,6 +28,8 @@ import { ProductRepository } from './repository/product.repository';
 import { DescriptionProductRepository } from './repository/description-product.repository';
 import { PriceRepository } from './repository/price-product.repository';
 import { ImageProductRepository } from './repository/image-product.repository';
+import { S3Service } from '../../s3/service/s3.service';
+import { EcommerceGlobalConfig } from '../../config/ecommerce-global.config';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { ImageProductRepository } from './repository/image-product.repository';
     DescriptionProductRepository,
     PriceRepository,
     ImageProductRepository,
+    S3Service,
+    EcommerceGlobalConfig,
   ],
   controllers: [ProductsController, CategoriesController],
 })

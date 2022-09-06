@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CityFilterDto } from '../dto/city.dto';
 import { CityService } from '../service/city.service';
 
@@ -7,7 +7,7 @@ import { CityService } from '../service/city.service';
 @Controller('cities')
 export class CitiesController {
   constructor(private readonly _cityService: CityService) {}
-
+  @ApiBearerAuth('StaticToken')
   @ApiQuery({
     name: 'countryIsoCode',
     type: String,

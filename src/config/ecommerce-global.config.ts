@@ -80,4 +80,12 @@ export class EcommerceGlobalConfig {
       wsEndpoint: this.config.get('WS_ENDPOINT'),
     };
   }
+
+  get tokenConfig(): {
+    token: string;
+  } {
+    return {
+      token: this.config.get('STATIC_TOKEN'),
+    };
+  }
 }

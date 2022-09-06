@@ -29,7 +29,7 @@ $ npm install
 ```
 
 ## Establecer variables de entorno en nuestro archivo .ENV
-- Las variables de entorno para ejecutar pruebas exitosas se comparten en este archivo de [MEGA](https://mega.nz/file/ZIQihRrL). La clave para descifrar el archivo se compartira por correo electrónico.
+- Las variables de entorno para ejecutar pruebas exitosas se comparten en este archivo de [MEGA](https://mega.nz/file/wdBDxAab). La clave para descifrar el archivo se compartirá por correo electrónico.
 ## Ejecutar Docker
 
 - Ejecuta el comando ```docker-compose up``` para correr los contenedores.

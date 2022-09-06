@@ -23,7 +23,16 @@ async function bootstrap() {
     configService.get<string>('CORS_ORIGIN') || process.env.CORS_ORIGIN;
   app.setGlobalPrefix(globalPrefix);
   const config = new DocumentBuilder()
-    .addApiKey({ type: 'apiKey', name: 'ApiKey', in: 'header' }, 'StaticToken')
+    .addApiKey(
+      {
+        type: 'apiKey',
+        name: 'ApiKey',
+        in: 'header',
+        description:
+          'Use Static abb07153a8235fda8ad3e99c711844e73fca4aca46efdd2b1414dd246630a82c',
+      },
+      'StaticToken',
+    )
     .addBearerAuth(
       {
         type: 'http',

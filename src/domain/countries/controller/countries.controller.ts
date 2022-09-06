@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CountryFilterDto } from '../dto/country.dto';
 import { CountriesService } from '../service/countries.service';
 
@@ -7,7 +7,7 @@ import { CountriesService } from '../service/countries.service';
 @Controller('countries')
 export class CountriesController {
   constructor(private readonly _countriesService: CountriesService) {}
-
+  @ApiBearerAuth('StaticToken')
   @ApiQuery({
     name: 'countryIdentifier',
     type: String,

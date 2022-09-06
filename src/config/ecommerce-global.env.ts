@@ -70,4 +70,8 @@ export class EcommerceGlobalEnv {
   @IsString()
   @IsNotEmpty()
   WS_ENDPOINT: string;
+
+  @IsString()
+  @IsNotEmpty()
+  STATIC_TOKEN: string;
 }

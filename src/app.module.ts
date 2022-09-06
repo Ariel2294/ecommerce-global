@@ -18,6 +18,7 @@ import { GeolocationService } from './domain/geolocation/service/geolocation.ser
 import { CountriesModule } from './domain/countries/countries.module';
 import { ProductsModule } from './domain/products/products.module';
 import { PublicGeoLocationMiddleware } from './shared/middlewares/public-geolocation.middleware';
+import { StaticTokenVerifyMiddleware } from './shared/middlewares/static-token-verify-middleware';
 
 @Module({
   imports: [
@@ -59,10 +60,22 @@ export class AppModule {
         { path: '(.*)/countries', method: RequestMethod.GET },
         { path: '(.*)/cities', method: RequestMethod.GET },
         { path: '(.*)/products', method: RequestMethod.GET },
-        { path: '(.*)/products/:productId', method: RequestMethod.PATCH },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL })
       .apply(PublicGeoLocationMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
+      .forRoutes({ path: '*', method: RequestMethod.ALL })
+      .apply(StaticTokenVerifyMiddleware)
+      .forRoutes(
+        {
+          path: 'auth/login',
+          method: RequestMethod.POST,
+        },
+        { path: 'auth/register', method: RequestMethod.POST },
+        { path: 'auth/verify-account/:token', method: RequestMethod.GET },
+        { path: 'countries', method: RequestMethod.GET },
+        { path: 'cities', method: RequestMethod.GET },
+        { path: 'products', method: RequestMethod.GET },
+        { path: 'categories', method: RequestMethod.POST },
+      );
   }
 }

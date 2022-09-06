@@ -44,7 +44,7 @@ export class ProductsController {
   update(@Body() product: ProductDto, @Param('productId') productId: string) {
     return this._productsService.update(product, productId);
   }
-
+  @ApiBearerAuth('StaticToken')
   @ApiQuery({
     name: 'productId',
     type: String,
